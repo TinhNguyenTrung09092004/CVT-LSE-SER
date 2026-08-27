@@ -114,7 +114,7 @@ pip install -r requirements.txt
 > For a different CUDA version replace `cu126` with e.g. `cu121`.
 > Full version list is in [requirements.txt](requirements.txt). This single file covers both the MS COCO and Flickr30k pipelines.
 
-> **Java is also required** (system dependency, not installable via pip): `pycocoevalcap`'s METEOR scorer and PTBTokenizer shell out to a JRE. Tested with OpenJDK 17.0.17. Install it via your system package manager before running Step 5 re-ranking/evaluation.
+> **Java is also required** (system dependency, not installable via pip): `pycocoevalcap`'s METEOR scorer and PTBTokenizer shell out to a JRE. Tested with OpenJDK 17.0.17. Install it via your system package manager.
 
 ---
 
