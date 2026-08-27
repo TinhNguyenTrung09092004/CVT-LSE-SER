@@ -82,7 +82,7 @@ class Config:
     weight_decay: float = 1e-4
     warmup_steps: int = 2000
 
-    seed: int = 42
+    seed: int = 0
     compile_decoder: bool = False
 
 

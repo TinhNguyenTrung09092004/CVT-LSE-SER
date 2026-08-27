@@ -34,7 +34,7 @@ class Config:
     LLM_BATCH_SIZE: int = 1
     K_PROMPT: int = 3
     device: str = "cuda" if torch.cuda.is_available() else "cpu"
-    seed: int = 42
+    seed: int = 0
 
 config = Config()
 
