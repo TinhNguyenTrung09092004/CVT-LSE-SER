@@ -228,6 +228,31 @@ Step 4 weights and vocabularies for both datasets: [Google Drive](https://drive.
 
 ---
 
+## Reproduction (COSNet, EVCap)
+
+We re-trained and re-evaluated COSNet and EVCap in the environment described above. Each model was implemented from a fork of its corresponding official repository.
+
+| Method | Upstream repository | Fork used for this paper |
+|---|---|---|
+| [COSNet](https://ieeexplore.ieee.org/document/9879735) | [YehLi/xmodaler](https://github.com/YehLi/xmodaler/tree/master/configs/image_caption/cosnet) | [`xmodaler @ cosnet_kaggle`](https://github.com/TinhNguyenTrung09092004/xmodaler/tree/cosnet_kaggle) |
+| [EVCap](https://ieeexplore.ieee.org/document/10656229/) (GPT-2 decoder) | [Jiaxuan-Li/EVCap](https://github.com/Jiaxuan-Li/EVCap) | [`EVCap @ kaggle`](https://github.com/TinhNguyenTrung09092004/EVCap/tree/kaggle) |
+
+Weights produced from our reproductions of COSNet and EVCap are available here: [Google Drive](https://drive.google.com/drive/folders/1N3AhmwFzWsIkQ_YKOwEC02MhhD9vSHxz?usp=sharing)
+
+### Controlled factors
+
+These are identical for COSNet, EVCap, and this repository's method:
+
+| Factor | Value |
+|---|---|
+| Random seed | 0 |
+| Dataset & split | MS COCO 2014, Karpathy split: 113 287 train+restval / 5 000 val / 5 000 test |
+| Beam width | 5 |
+| Maximum caption length | 45 |
+| Evaluation package | pycocoevalcap |
+
+---
+
 ## Qualitative Examples
 
 See [examples/README.md](examples/README.md) for four annotated images from the MS COCO Karpathy test split (5k images) comparing the baseline (`CVT`) against the proposed semantic-evidence fusion and LLM re-ranking components (`CVT-SER`, `CVT-LSE`, `CVT-LSE-SER`), with generated evidence, candidate captions, and ground truths.
