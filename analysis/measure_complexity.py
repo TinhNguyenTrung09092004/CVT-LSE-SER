@@ -412,6 +412,10 @@ cap_macs, _ = profile(
 )
 cap_gflops = cap_macs * 2 / 1e9 / BATCH_SIZE
 
+_cap_macs_str = clever_format([cap_macs], "%.3f")[0]
+print(f"\n  [CaptionModel] MACs: {_cap_macs_str} ({cap_macs:.0f})   "
+      f"|  {cap_macs / 1e9 / BATCH_SIZE:.3f} GMACs/img  |  {cap_gflops:.3f} GFLOPs/img")
+
 rows.append(("CaptionModel (beam search)", cap_total, cap_gflops, cap_ms,
              f"caption generation (beam={BEAM_WIDTH}, max_len={MAXLEN})"))
 
@@ -718,7 +722,7 @@ torch.cuda.empty_cache() if DEVICE == "cuda" else None
 
 
 def fmt_flops(gflops):
-    return f"{gflops:.2f} G" if gflops is not None else "N/A*"
+    return f"{gflops:.3f} G" if gflops is not None else "N/A*"
 
 
 RULE = "=" * 96
@@ -731,11 +735,13 @@ print(f"  Device: {DEVICE}   |   Batch size: {BATCH_SIZE}\n")
 print(f"  {'Model':<30} {'Params (M)':>12} {'FLOPs/img':>14} {'Time (ms/img)':>15}  Role")
 print("  " + "-" * 92)
 for _name, _params, _gflops, _ms, _role in rows:
-    print(f"  {_name:<30} {_params/1e6:>12.2f} {fmt_flops(_gflops):>14} {_ms:>15.2f}  {_role}")
+    print(f"  {_name:<30} {_params/1e6:>12.3f} {fmt_flops(_gflops):>14} {_ms:>15.3f}  {_role}")
 
 print("\n  CaptionModel breakdown (shared_embedding counted once)\n")
 for _name, _params in caption_breakdown:
-    print(f"  {_name:<30} {_params/1e6:>12.2f} M")
+    print(f"  {_name:<30} {_params/1e6:>12.3f} M")
 print("  " + "-" * 45)
-print(f"  {'TOTAL (unique params)':<30} {cap_total/1e6:>12.2f} M")
+print(f"  {'TOTAL (unique params)':<30} {cap_total/1e6:>12.3f} M")
+print(f"  {'MACs (beam search / img)':<30} {cap_macs/1e9/BATCH_SIZE:>12.3f} G"
+      f"   ({cap_gflops:.3f} GFLOPs)")
 
