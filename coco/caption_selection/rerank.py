@@ -55,7 +55,6 @@ set_seed(config.seed)
 class BaseLLMRanker(ABC):
     def __init__(self):
         self.invalid_lines: List[str] = []
-        self._sample_prompt_printed = False
 
     @abstractmethod
     def quick_chat(self, message: str, system: str = "You are a helpful assistant.") -> str:
@@ -218,12 +217,6 @@ Example:
 
         full_prompt = self._build_rerank_prompt(images_section, "\n".join(context_section))
         self.last_full_prompt = full_prompt
-
-        if not self._sample_prompt_printed:
-            self._sample_prompt_printed = True
-            print("\nSAMPLE PROMPT SENT TO LLM")
-            print(full_prompt)
-            print()
 
         response = self.quick_chat(
             full_prompt,
@@ -417,8 +410,6 @@ def load_detection_data(split: str = "test"):
             detection_data[img]['reltr'], key=lambda x: x[1], reverse=True
         )
 
-    print(f"Detection data loaded: {len(detection_data)} images")
-
     return detection_data
 
 detection_data = load_detection_data(split="test")
@@ -443,7 +434,6 @@ def load_desc_data(csv_path: str, score_threshold: float = 0.25) -> Dict[str, Li
         if descs_scores:
             desc_data[str(row['image'])] = descs_scores
 
-    print(f"Desc data loaded: {len(desc_data)} images")
     return desc_data
 
 DESC_CSV_PATH = "data/coco/descriptions/coco_descs_test_scored.csv"
