@@ -2,7 +2,7 @@
 
 Four images from the MS COCO Karpathy test split (5k images) illustrating the effect of the two proposed components:
 
-| Variant | LLM semantic-evidence **fusion** (encoder) | LLM-guided **re-ranking** (selection) |
+| Variant | LLM semantic-evidence **fusion** (encoder) | LLM-guided **candidate selection** |
 |---|---|---|
 | `CVT` | ✗ (baseline, top-1 beam candidate) | ✗ |
 | `CVT-SER` | ✗ | ✓ |

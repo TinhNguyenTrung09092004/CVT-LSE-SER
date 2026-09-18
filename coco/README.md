@@ -228,7 +228,7 @@ Outputs:
 
 ---
 
-## Step 5 – Caption Re-ranking
+## Step 5 – Evidence-Guided Candidate Selection
 
 [caption_selection/rerank.py](caption_selection/rerank.py):
 
@@ -242,7 +242,7 @@ DETECTION_DIR = "data/coco/detections"
 python coco/caption_selection/rerank.py
 ```
 
-Every image is re-ranked by the LLM; an image whose LLM response cannot be parsed falls back to the top-1 beam candidate (marked `beam_fallback` in the `selection_source` column).
+Every image goes through the LLM selector; an image whose LLM response cannot be parsed falls back to the top-1 beam candidate (marked `beam_fallback` in the `selection_source` column).
 
 LLM-selected captions are saved to `outputs/coco/coco_llm_rerank_selections.csv`.
 
@@ -271,7 +271,7 @@ python coco/analysis/evaluate_chair.py
 
 ### 6b. Candidate order sensitivity
 
-[analysis/evaluate_order_sensitivity.py](analysis/evaluate_order_sensitivity.py) re-runs the Step 5 re-ranker `N_ORDERINGS` times over the same candidates, each time presenting them in a different order:
+[analysis/evaluate_order_sensitivity.py](analysis/evaluate_order_sensitivity.py) re-runs the Step 5 selector `N_ORDERINGS` times over the same candidates, each time presenting them in a different order:
 
 ```python
 CSV_PATH       = "outputs/coco/beam_candidates_epoch_<EPOCH>.csv"          # from Step 4

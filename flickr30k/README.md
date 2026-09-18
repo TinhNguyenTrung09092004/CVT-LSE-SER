@@ -207,7 +207,7 @@ Outputs:
 
 ---
 
-## Step 5 – Caption Re-ranking
+## Step 5 – Evidence-Guided Candidate Selection
 
 [caption_selection/rerank.py](caption_selection/rerank.py):
 
@@ -221,6 +221,6 @@ DETECTION_DATASET_DIR = "data/flickr30k/detections"
 python flickr30k/caption_selection/rerank.py
 ```
 
-Every image is re-ranked by the LLM; an image whose LLM response cannot be parsed falls back to the top-1 beam candidate (marked `beam_fallback` in the `selection_source` column).
+Every image goes through the LLM selector; an image whose LLM response cannot be parsed falls back to the top-1 beam candidate (marked `beam_fallback` in the `selection_source` column).
 
 LLM-selected captions are saved to `outputs/flickr30k/flickr30k_llm_rerank_selections.csv`.

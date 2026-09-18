@@ -17,7 +17,7 @@ image
 CLIP ViT-L/14 features ───────▶ Encoder–Decoder training ──▶ beam search captions
                                                                      │
                                                                      ▼
-                                                    Qwen3-4B re-ranking ──▶ final caption
+                                           Qwen3-4B candidate selection ──▶ final caption
 ```
 
 Both **MS COCO 2014** and **Flickr30k** (Karpathy splits) run this exact pipeline. Model choices, hyperparameters, architecture, and external checkpoints are identical across datasets and documented once below; each dataset has its own subdirectory and README covering only what differs - paths, split/part schemes, and run counts.
@@ -52,12 +52,12 @@ Both datasets share the same directory structure for Steps 1-5; Step 6 (`analysi
     │       └── train.py                      # Train Encoder–Decoder + beam search inference
     │
     ├── caption_selection/                    # Step 5
-    │       └── rerank.py                     # Qwen3-4B re-ranks beam search candidates
+    │       └── rerank.py                     # Qwen3-4B selects among beam search candidates
     │
     └── analysis/                             # Step 6 - MS COCO only
             ├── evaluate_chair.py             # CHAIR_s / CHAIR_i object hallucination
-            ├── evaluate_order_sensitivity.py # re-ranking stability across candidate orderings
-            └── compare_significance.py       # paired bootstrap test, LLM re-rank vs beam top-1
+            ├── evaluate_order_sensitivity.py # selection stability across candidate orderings
+            └── compare_significance.py       # paired bootstrap test, LLM selection vs beam top-1
 ```
 
 
@@ -80,7 +80,7 @@ data/<dataset>/
     └── features/                      # Step 3 output
 
 checkpoints/                      # HOICLIP / RelTR external checkpoints
-outputs/<dataset>/                # Step 4-5 output: checkpoints, beam candidates, re-rank selections
+outputs/<dataset>/                # Step 4-5 output: checkpoints, beam candidates, selected captions
 ```
 
 ---
@@ -185,7 +185,7 @@ BEAM_WIDTH      = 5
 ```
 
 
-### Step 5 – Caption Re-ranking
+### Step 5 – Evidence-Guided Candidate Selection
 
 `caption_selection/rerank.py` uses `Qwen/Qwen3-4B` to pick the best beam-search candidate per image, using the same YOLO/HOI/RelTR detection evidence and BLIP-scored descriptions as context. Every image goes through the LLM; only an unparsable LLM response falls back to the top-1 beam candidate. The selected captions are written to `outputs/{dataset}/{dataset}_llm_rerank_selections.csv`, and BLEU-1/2/3/4, CIDEr, METEOR, and ROUGE-L are printed to stdout.
 
@@ -196,8 +196,8 @@ Three analyses beyond the BLEU/CIDEr/METEOR/ROUGE-L numbers of Step 5. All three
 | Script | Measures |
 |---|---|
 | `analysis/evaluate_chair.py` | CHAIR_s / CHAIR_i object hallucination of the beam top-1 candidate and of the LLM-selected caption |
-| `analysis/evaluate_order_sensitivity.py` | How often the re-ranker's choice changes when the candidates are presented in a different order - 5 cyclic orderings of the same candidate set, re-ranked independently |
-| `analysis/compare_significance.py` | Paired bootstrap significance test (2000 resamples) of LLM re-ranking vs beam top-1 on all caption metrics |
+| `analysis/evaluate_order_sensitivity.py` | How often the LLM selector's choice changes when the candidates are presented in a different order - 5 cyclic orderings of the same candidate set, selected independently |
+| `analysis/compare_significance.py` | Paired bootstrap significance test (2000 resamples) of LLM candidate selection vs beam top-1 on all caption metrics |
 
 ### Computational Cost
 
@@ -255,7 +255,7 @@ These are identical for COSNet, EVCap, and this repository's method:
 
 ## Qualitative Examples
 
-See [examples/README.md](examples/README.md) for four annotated images from the MS COCO Karpathy test split (5k images) comparing the baseline (`CVT`) against the proposed semantic-evidence fusion and LLM re-ranking components (`CVT-SER`, `CVT-LSE`, `CVT-LSE-SER`), with generated evidence, candidate captions, and ground truths.
+See [examples/README.md](examples/README.md) for four annotated images from the MS COCO Karpathy test split (5k images) comparing the baseline (`CVT`) against the proposed semantic-evidence fusion and LLM candidate selection components (`CVT-SER`, `CVT-LSE`, `CVT-LSE-SER`), with generated evidence, candidate captions, and ground truths.
 
 ---
 
