@@ -229,4 +229,4 @@ LLM-selected captions are saved to `outputs/flickr30k/flickr30k_llm_rerank_selec
 
 ## Logs
 
-Step 4 and Step 5 logs of the three runs with random seeds 0, 42, and 3407 (`seed` in `Config` of [training/train.py](training/train.py); every other value unchanged): [Google Drive](https://drive.google.com/drive/folders/19JlwSZPNabhjxHq3ygGypttPLyUwN5rU?usp=drive_link)
+Step 4 and Step 5 logs of the three runs with random seeds 0, 42, and 3407: [Google Drive](https://drive.google.com/drive/folders/19JlwSZPNabhjxHq3ygGypttPLyUwN5rU?usp=drive_link)
